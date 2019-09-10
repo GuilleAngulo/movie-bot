@@ -1,0 +1,14 @@
+{
+    "appenders": {
+        "error": {
+            "type": "file",
+            "filename": "log/error.log"
+        },
+        "errorConsole": {
+            "type": "console"
+        }
+    },
+    "categories": {
+        "default": { "appenders": [ "error", "errorConsole" ], "level": "ERROR" }
+    }
+  }
