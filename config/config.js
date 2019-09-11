@@ -3,6 +3,7 @@ module.exports = {
     CURRENT_CONTENT_PATH: './content/current/',
     LOG_PATH: `./log/` ,
     APP_LANGUAGE: 'es',
+    MOVIEDB_IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/',
     MOVIE_GENRE: [
       { id: 28, name: 'Action' },
       { id: 12, name: 'Adventure' }, 

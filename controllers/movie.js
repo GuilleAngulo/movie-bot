@@ -13,9 +13,9 @@ const path = require('path');
 module.exports = {
     async robot(req, res) {
         console.log('> [movie-bot] Request submitted - Starting bot ...');
-        //await cleanPreviousContent();
-        //await log.setUpLogDirectory();
-        //await discoverMovie(req, res);
+        await cleanPreviousContent();
+        await log.setUpLogDirectory();
+        await discoverMovie(req, res);
         await text.robot();
         await image.robot();
     }    
@@ -33,7 +33,7 @@ async function discoverMovie(req, res) {
     console.log(`> [movie-bot] Searching - ${genre} ${type} (${nationality.long})`);
 
     try{
-        const response =  await moviedbAPI.discoverApiCall(type, genreId, nationality.short.toLowerCase());
+        const response =  await moviedbAPI.discoverMovies(type, genreId, nationality.short);
         const result = response.data.results;
 
         if (result.length === 0) {
@@ -69,14 +69,14 @@ async function discoverMovie(req, res) {
             });
             console.log('> --------------------');
         }
-
-        metadata.save(mediaSelected);  
-        
+        mediaSelected.type = type;
+       
         if (type == "movie") 
-            console.log(`> [movie-bot] Chosen movie: ${mediaSelected.title} (${mediaSelected.release_date.slice(0, 4)})`);
-        else if (type == "tv")
+            console.log(`> [movie-bot] Chosen movie: ${mediaSelected.title} (${mediaSelected.release_date.slice(0, 4)})`); 
+        else if (type == "tv") 
             console.log(`> [movie-bot] Chosen TV serie: ${mediaSelected.original_name} (${mediaSelected.first_air_date.slice(0, 4)})`);
         
+        metadata.save(mediaSelected);
         return;
 
     } catch (error) {

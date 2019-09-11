@@ -29,19 +29,26 @@ module.exports = {
 
 
   async function fetchContentFromWikipedia(media) {
-    console.log('> [movie-bot] Fetching data from Wikipedia');
+    const query = media.original_title + ' ' + media.type + ' ' + media.release_date.slice(0, 4);
+    console.log(`> [movie-bot] Fetching data from Wikipedia - (query: ${query})`);
     const wikipediaSearchTerm = {
-        "articleName": media.title + ' ' + media.release_date.slice(0, 4),
+        "articleName": query,
         "lang": config.APP_LANGUAGE
     }
     const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey);
     const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2');
-    const wikipediaResponse = await wikipediaAlgorithm.pipe(wikipediaSearchTerm);
-    const wikipediaContent = wikipediaResponse.get();
-
-    media.links = wikipediaContent.references;
-    media.summary = wikipediaContent.summary;
-    console.log('> [movie-bot] Data correctly stored');
+    try {
+      const wikipediaResponse = await wikipediaAlgorithm.pipe(wikipediaSearchTerm);
+      const wikipediaContent = wikipediaResponse.get();
+  
+      media.links = wikipediaContent.references;
+      media.summary = wikipediaContent.summary;
+      console.log('> [movie-bot] Data correctly stored');
+      return;
+    } catch (error) {
+      logger.error('> [movie-bot] Error fetching data from Wikipedia:: ', error);
+    } 
+    
   }
 
   function sanitizeContent(media) {
@@ -72,7 +79,7 @@ module.exports = {
   async function fetchKeywordsFromWatson(media) {
     console.log('> [movie-bot] Starting to fetch keywords from Watson');
     try {
-      media.keywords = await fetchWatsonAndReturnKeywords(media.cleanSummary);
+      media.keywords = await fetchWatsonAndReturnKeywords(media.overview);
       console.log(`> [movie-bot] Keywords: [${media.keywords.join(', ')}]`);
     } catch (error) {
       logger.error(`> [movie-bot] Could not get keywords from Watson`, error);
