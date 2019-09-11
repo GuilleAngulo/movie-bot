@@ -5,6 +5,7 @@ const google = require('googleapis').google;
 const customSearch = google.customsearch('v1');
 const metadata = require('./metadata');
 const logger = require('../services/log').logger.getLogger('error');
+const config = require('../config/config');
 
 const googleSearchCredentials = require('../credentials/google-search');
 
@@ -14,6 +15,7 @@ module.exports = {
         const media = metadata.load();
         await downloadPoster(media);
         await donwnloadAlternativePoster(media);
+        await downloadImages(media);
         metadata.save(media);
     }
 }
@@ -37,10 +39,7 @@ async function  downloadAndSave(url, fileName) {
     });
 }
 
-async function donwnloadAlternativePoster(media) {
-
-    const query = media.original_title + ' poster ' + media.release_date.slice(0, 4);
-
+async function googleCustomSearchImageLink(query) {
     const response = await customSearch.cse.list({
         auth: googleSearchCredentials.API_KEY,
         cx: googleSearchCredentials.SEARCH_ENGINE_ID,
@@ -50,19 +49,35 @@ async function donwnloadAlternativePoster(media) {
         num: 2
     });
 
-    for (let attempts = 0; attempts < 5; attempts++) {
-        try {
-            const alternativePosterURL = response.data.items[0].link;
-            media.alternative_poster_URL = alternativePosterURL;
-            await downloadAndSave(alternativePosterURL, 'alternative-poster.jpg');
-            console.log(`> [movie-bot] Alternative poster downloaded`);
-            break;
+    return response.data.items[0].link;
+}
 
-        } catch (error) {
-            logger.error(`Error in ${attempts} attempt to download an alternative poster `, error);
+async function donwnloadAlternativePoster(media) {
+
+    const query = media.original_title + ' poster ' + media.release_date.slice(0, 4);
+
+    try {
+        const alternativePosterURL = await googleCustomSearchImageLink(query);
+        media.alternative_poster_URL = alternativePosterURL;
+        await downloadAndSave(alternativePosterURL, 'alternative-poster.jpg');
+        console.log(`> [movie-bot] Alternative poster downloaded`);
+    } catch (error) {
+        logger.error(`Failed to download an alternative poster `, error);
+    }
+}
+
+async function downloadImages(media) {
+    console.log(`> [movie-bot] Downloading images from Google`);
+    for (let i = 0; i < config.NUMBER_IMAGES; i++) {
+        const query = media.title + ' ' + media.release_date.slice(0, 4) + ' ' + media.keywords[i];
+        
+        try{
+            const imageLink = await googleCustomSearchImageLink(query);
+            console.log(`> [movie-bot] Image ${i} - (query: ${query}) `);
+            await downloadAndSave(imageLink, `${media.title}-${i + 1}.jpg`);
+        } catch (err) {
+            logger.error(`Failed to download an image `, error);
         }
     }
-
-
-
+    console.log(`> [movie-bot] Images correctly downloaded`);
 }

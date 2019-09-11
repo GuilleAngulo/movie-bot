@@ -4,6 +4,7 @@ const moviedbAPI = require('../services/moviedb-api');
 const config = require('../config/config');
 const metadata = require('../services/metadata');
 const image = require('../services/image');
+const text = require('../services/text');
 const log = require('../services/log');
 const logger = log.logger.getLogger('error');
 const fs = require('fs');
@@ -15,6 +16,7 @@ module.exports = {
         //await cleanPreviousContent();
         //await log.setUpLogDirectory();
         //await discoverMovie(req, res);
+        await text.robot();
         await image.robot();
     }    
 }

@@ -7,10 +7,10 @@
 /credentials
 
 #current content
-/content/current/*
+**/content/current/*
 
 #log
-/log/*
+**/log/*
 
 # misc
 .DS_Store

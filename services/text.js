@@ -1,17 +1,15 @@
 const algorithmia = require('algorithmia');
-const algorithmiaApiKey = require('../credentials/algorithmia');
+const algorithmiaApiKey = require('../credentials/algorithmia').API_KEY;
 const config = require('../config/config');
+const logger = require('../services/log').logger.getLogger('error');
 
-const sentenceBoundaryDetection = require('sbd');
-
-/*
-const watsonApiKey = require('../credentials/watson-nlu.json').apikey
-const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js')
+const watsonCredentials = require('../credentials/watson-nlu');
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1.js');
 const nlu = new NaturalLanguageUnderstandingV1({
-  iam_apikey: watsonApiKey,
+  iam_apikey: watsonCredentials.API_KEY,
   version: '2018-04-05',
-  url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
-})*/
+  url: watsonCredentials.URL
+});
 
 const metadata = require('../services/metadata');
 
@@ -23,9 +21,7 @@ module.exports = {
       
         await fetchContentFromWikipedia(media)
         sanitizeContent(media)
-        breakContentIntoSentences(content)
-        limitMaximumSentences(content)
-        await fetchKeywordsOfAllSentences(content)
+        await fetchKeywordsFromWatson(media)
       
         metadata.save(media);
       }
@@ -33,9 +29,9 @@ module.exports = {
 
 
   async function fetchContentFromWikipedia(media) {
-    console.log('> [movie-bot] Fetching media sinopsis from Wikipedia');
+    console.log('> [movie-bot] Fetching data from Wikipedia');
     const wikipediaSearchTerm = {
-        "articleName": media.original_title + ' ' + media.release_date.slice(0, 4),
+        "articleName": media.title + ' ' + media.release_date.slice(0, 4),
         "lang": config.APP_LANGUAGE
     }
     const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey);
@@ -43,15 +39,16 @@ module.exports = {
     const wikipediaResponse = await wikipediaAlgorithm.pipe(wikipediaSearchTerm);
     const wikipediaContent = wikipediaResponse.get();
 
-    media.rawSinopsis = wikipediaContent.content;
-    console.log('> [movie-bot] Sinopsis stored');
+    media.links = wikipediaContent.references;
+    media.summary = wikipediaContent.summary;
+    console.log('> [movie-bot] Data correctly stored');
   }
 
-  function sanitizeContent(content) {
-    const withoutBlankLinesAndMarkdown = removeBlankLinesAndMarkdown(content.sourceContentOriginal)
-    const withoutDatesInParentheses = removeDatesInParentheses(withoutBlankLinesAndMarkdown)
+  function sanitizeContent(media) {
+    const withoutBlankLinesAndMarkdown = removeBlankLinesAndMarkdown(media.summary);
+    const withoutDatesInParentheses = removeDatesInParentheses(withoutBlankLinesAndMarkdown);
 
-    content.sourceContentSanitized = withoutDatesInParentheses
+    media.cleanSummary = withoutDatesInParentheses;
 
     function removeBlankLinesAndMarkdown(text) {
       const allLines = text.split('\n')
@@ -72,39 +69,20 @@ module.exports = {
     return text.replace(/\((?:\([^()]*\)|[^()])*\)/gm, '').replace(/  /g,' ')
   }
 
-  function breakContentIntoSentences(content) {
-    content.sentences = []
-
-    const sentences = sentenceBoundaryDetection.sentences(content.sourceContentSanitized)
-    sentences.forEach((sentence) => {
-      content.sentences.push({
-        text: sentence,
-        keywords: [],
-        images: []
-      })
-    })
+  async function fetchKeywordsFromWatson(media) {
+    console.log('> [movie-bot] Starting to fetch keywords from Watson');
+    try {
+      media.keywords = await fetchWatsonAndReturnKeywords(media.cleanSummary);
+      console.log(`> [movie-bot] Keywords: [${media.keywords.join(', ')}]`);
+    } catch (error) {
+      logger.error(`> [movie-bot] Could not get keywords from Watson`, error);
+    }  
   }
 
-  function limitMaximumSentences(content) {
-    content.sentences = content.sentences.slice(0, content.maximumSentences)
-  }
-
-  async function fetchKeywordsOfAllSentences(content) {
-    console.log('> [text-robot] Starting to fetch keywords from Watson')
-
-    for (const sentence of content.sentences) {
-      console.log(`> [text-robot] Sentence: "${sentence.text}"`)
-
-      sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text)
-
-      console.log(`> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`)
-    }
-  }
-
-  async function fetchWatsonAndReturnKeywords(sentence) {
+  async function fetchWatsonAndReturnKeywords(text) {
     return new Promise((resolve, reject) => {
       nlu.analyze({
-        text: sentence,
+        text: text,
         features: {
           keywords: {}
         }
