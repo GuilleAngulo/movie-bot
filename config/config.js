@@ -1,6 +1,7 @@
 module.exports = {
     PORT: process.env.PORT || 5000,
     CURRENT_CONTENT_PATH: './content/current/',
+    STORED_CONTENT_PATH: './content/stored/',
     LOG_PATH: `./log/` ,
     APP_LANGUAGE: 'es',
     MOVIEDB_IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/',
@@ -25,6 +26,6 @@ module.exports = {
       { id: 10752, name: 'War' }, 
       { id: 37, name: 'Western' }
       ],
-    NUMBER_RESULTS: 10,
+    NUMBER_RESULTS: 5,
     NUMBER_IMAGES: 4
   };

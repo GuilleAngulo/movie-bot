@@ -88,8 +88,9 @@ async function downloadImages(media) {
         const response =  await moviedbAPI.getImages(media.id);
         for (let i = 0; i < config.NUMBER_IMAGES; i++) {
             const imageLink = getImageLink('w500', response.data.backdrops[i].file_path);
-            await downloadAndSave(imageLink, `${media.title.toLowerCase()}-${i + 1}.jpg`);
-            console.log(`> [movie-bot] Image ${i + 1}  downloaded.`);
+            //await downloadAndSave(imageLink, `${media.title.toLowerCase()}-${i + 1}.jpg`);
+            await downloadAndSave(imageLink, `${i + 1}.jpg`);
+            console.log(`> [movie-bot] Image ${i + 1} downloaded.`);
         }
     } catch (error) {
         logger.error(error);

@@ -6,18 +6,23 @@ const metadata = require('../services/metadata');
 const image = require('../services/image');
 const text = require('../services/text');
 const log = require('../services/log');
+const cache = require('../services/cache');
 const logger = log.logger.getLogger('error');
-const fs = require('fs');
-const path = require('path');
+
 
 module.exports = {
     async robot(req, res) {
         console.log('> [movie-bot] Request submitted - Starting bot ...');
-        await cleanPreviousContent();
+        await cache.cleanPreviousContent();
         await log.setUpLogDirectory();
         await discoverMovie(req, res);
-        await text.robot();
-        await image.robot();
+        if (await cache.isContentStored()) {
+            await cache.decompressContent();
+        } else {
+            await text.robot();
+            await image.robot();
+            await cache.compressContent();
+        }
     }    
 }
 
@@ -77,6 +82,7 @@ async function discoverMovie(req, res) {
             console.log(`> [movie-bot] Chosen TV serie: ${mediaSelected.original_name} (${mediaSelected.first_air_date.slice(0, 4)})`);
         
         metadata.save(mediaSelected);
+        console.log("New metada saved with id: " + mediaSelected.id);
         return;
 
     } catch (error) {
@@ -88,20 +94,5 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-async function cleanPreviousContent() {
-
-    const previousContentPath = config.CURRENT_CONTENT_PATH;
-
-    fs.readdir(previousContentPath, (err, files) => {
-        if (err) logger.error(err);
-        for (let file of files) {
-            fs.unlink(path.join(previousContentPath, file), (err) => {
-                if(err) logger.error(err);
-            });
-        }
-    });
-
-    console.log('> [movie-bot] Previous content removed');
-}
 
 

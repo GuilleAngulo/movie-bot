@@ -19,9 +19,9 @@ module.exports = {
         console.log('> [movie-bot] Starting...');
         const media = metadata.load();
       
-        await fetchContentFromWikipedia(media)
-        sanitizeContent(media)
-        await fetchKeywordsFromWatson(media)
+        await fetchContentFromWikipedia(media);
+        sanitizeContent(media);
+        await fetchKeywordsFromWatson(media);
       
         metadata.save(media);
       }
@@ -47,7 +47,11 @@ module.exports = {
       return;
     } catch (error) {
       logger.error('> [movie-bot] Error fetching data from Wikipedia:: ', error);
-    } 
+    } finally {
+      media.links = "";
+      media.summary = "";
+    }
+    
     
   }
 
@@ -108,4 +112,5 @@ module.exports = {
       })
     })
   }
+
 
