@@ -6,7 +6,6 @@ const countryCodes = require('../config/country-codes.json');
 module.exports = {
   discoverMovies(type, genreId, nationality) {  
     const language = countryCodes.find(e => e.country_code == nationality).language;
-    console.log(language);
       return axios.get(`https://api.themoviedb.org/3/discover/${type}`, {
         params: {
           api_key: moviedb.MOVIEDB_TOKEN,

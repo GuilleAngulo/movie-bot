@@ -25,6 +25,6 @@ module.exports = {
       { id: 10752, name: 'War' }, 
       { id: 37, name: 'Western' }
       ],
-    NUMBER_RESULTS: 5,
+    NUMBER_RESULTS: 10,
     NUMBER_IMAGES: 4
   };

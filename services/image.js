@@ -49,7 +49,7 @@ async function googleCustomSearchImageLink(query) {
         num: 2
     });
 
-    return response.data.items[0].link;
+    return response.data.items[1].link;
 }
 
 async function donwnloadAlternativePoster(media) {

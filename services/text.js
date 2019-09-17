@@ -29,7 +29,7 @@ module.exports = {
 
 
   async function fetchContentFromWikipedia(media) {
-    const query = media.original_title + ' ' + media.type + ' ' + media.release_date.slice(0, 4);
+    const query = media.original_title;
     console.log(`> [movie-bot] Fetching data from Wikipedia - (query: ${query})`);
     const wikipediaSearchTerm = {
         "articleName": query,
@@ -56,6 +56,7 @@ module.exports = {
     const withoutDatesInParentheses = removeDatesInParentheses(withoutBlankLinesAndMarkdown);
 
     media.cleanSummary = withoutDatesInParentheses;
+    console.log(`> [movie-bot] Summary from Wikipedia: ${media.cleanSummary}`);
 
     function removeBlankLinesAndMarkdown(text) {
       const allLines = text.split('\n')
