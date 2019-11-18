@@ -12,7 +12,8 @@ const logger = log.logger.getLogger('error');
 
 module.exports = {
     async robot(req, res) {
-        console.log('> [movie-bot] Request submitted - Starting bot ...');
+        console.log('> --------------------');
+        console.log('> [movie-bot] Request submitted.');
         await cache.cleanPreviousContent();
         await log.setUpLogDirectory();
         await discoverMovie(req, res);
@@ -35,7 +36,7 @@ async function discoverMovie(req, res) {
     const nationality = req.body.conversation.memory['nationality'];
 
     const genre = (config.MOVIE_GENRE.find(e => e.id == genreId)).name;
-    console.log(`> [movie-bot] Searching - ${genre} ${type} (${nationality.long})`);
+    console.log(`> [movie-bot] Searching for - ${genre} ${type} (${nationality.long})`);
 
     try{
         const response =  await moviedbAPI.discoverMovies(type, genreId, nationality.short);

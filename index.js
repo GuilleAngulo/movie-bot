@@ -5,6 +5,8 @@ const cors = require('cors');
 const MovieController = require('./controllers/movie');
 const ChatController = require('./controllers/chat');
 
+const chat = require('./services/chat');
+
 const port = require('./config/config').PORT;
 
 const app = express();
@@ -24,6 +26,7 @@ app.post('/errors', function(req, res) {
 
 
 app.listen(port, () => {
-  console.log('> [movie-bot] Initializing ...');
-  console.log(`> [movie-bot] Listenning on port ${port}`);
+  console.log(`> [movie-bot] Initializing ... listenning on port ${port}`);
+  chat.main();
 });
+

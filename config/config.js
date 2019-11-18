@@ -1,6 +1,6 @@
 module.exports = {
     PORT: process.env.PORT || 5000,
-    NGROK_TUNNEL_URL: 'https://55e0c225.ngrok.io',
+    NGROK_TUNNEL_URL: 'https://64e30539.ngrok.io',
     CURRENT_CONTENT_PATH: './content/current/',
     STORED_CONTENT_PATH: './content/stored/',
     LOG_PATH: `./log/` ,

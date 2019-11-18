@@ -7,7 +7,7 @@
 /credentials
 
 #current content
-**/content/current/*
+**/content/*
 
 #log
 **/log/*

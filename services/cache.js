@@ -90,10 +90,8 @@ module.exports = {
     async isContentStored() {
         const content = metadata.load();
         const input = fs.readdirSync(config.STORED_CONTENT_PATH);
-        console.log("Selected id:" + content.id);
         
         return input.some(filename => {
-            console.log(filename);
             if(filename == `${content.id}.tar.gz`) {
                 console.log('> [movie-bot] The content has been previously stored.');
                 return true;
