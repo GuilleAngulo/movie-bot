@@ -9,5 +9,5 @@ After getting the parameters, it uses [The Movie Database API](https://www.themo
 
 :video_camera: **Youtube**. Finally it makes another request to Youtube API URL in order to get a link to a trailer of the selected media.
 
-:package: **Cache**. Another important part is that the app implements a kind of a "cache memory": If the random selected content was picked before, the bot doesn´t have to make every request for data again because in the folder "/content/stored/" there are stored all media data and metadata compressed. This way the app will be faster the more is used.
+:package: **Cache**. Another important part is that the app implements a kind of a "cache memory": If the random selected content was picked before, the bot doesn´t have to make every request for data again because in the folder ***/content/stored/*** there are stored all media data and metadata compressed (the file names are the content id at The Movie Database). This way the app will be faster the more is used.
 
