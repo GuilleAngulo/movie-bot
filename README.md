@@ -11,3 +11,13 @@ After getting the parameters, it uses [The Movie Database API](https://www.themo
 
 :package: **Cache**. Another important part is that the app implements a kind of a *cache memory*: If the random selected content was picked before, the bot doesn´t have to make every request for data again because in the folder **'/content/stored/'** there are stored all media data and metadata compressed (the file names are the content id at The Movie Database). This way the app will be faster the more is used.
 
+## Prerequisites
+### ngrok
+The simples way to run the project only locally requires tunneling service, to receive the answer from chatbot service at a public address. ngrok provides a free plan, and it is possible to run it as simple as:
+```
+ngrok http 5000
+```
+The port is 5000 because our app is running at this port (is possible to change it at **"/config/config.js"**). Now the public address making a tunnel to your application running at http://localhost:5000 is shown as at the image below:
+
+### SAP Conversational AI
+It´s necessary to sign up and create the bot  
