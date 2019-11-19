@@ -4,6 +4,7 @@ const moviedbAPI = require('../services/moviedb-api');
 const config = require('../config/config');
 const metadata = require('../services/metadata');
 const image = require('../services/image');
+const youtube = require('../services/youtube');
 const text = require('../services/text');
 const log = require('../services/log');
 const cache = require('../services/cache');
@@ -22,6 +23,7 @@ module.exports = {
         } else {
             await text.robot();
             await image.robot();
+            await youtube.robot();
             await cache.compressContent();
         }
     }    
@@ -83,7 +85,7 @@ async function discoverMovie(req, res) {
             console.log(`> [movie-bot] Chosen TV serie: ${mediaSelected.original_name} (${mediaSelected.first_air_date.slice(0, 4)})`);
         
         metadata.save(mediaSelected);
-        console.log("New metada saved with id: " + mediaSelected.id);
+        //console.log("New metada saved with id: " + mediaSelected.id);
         return;
 
     } catch (error) {

@@ -1,13 +1,15 @@
 'use strict';
 
+const axios = require('axios');
 const imageDownloader = require('image-downloader');
 const google = require('googleapis').google;
 const customSearch = google.customsearch('v1');
-const metadata = require('./metadata');
+const metadata = require('../services/metadata');
 const logger = require('../services/log').logger.getLogger('error');
 const config = require('../config/config');
 const moviedbAPI = require('../services/moviedb-api');
 const googleSearchCredentials = require('../credentials/google-search');
+const youtube_API_KEY = require('../credentials/youtube-search').API_KEY;
 
 
 module.exports = {
@@ -99,4 +101,22 @@ async function downloadImages(media) {
 
 function getImageLink(size, file_path) {
     return `${config.MOVIEDB_IMAGE_BASE_URL}/${size}${file_path}`;
+}
+
+async function youtubeSearch(media) {
+    const query = `${media.original_title} ${media.release_date.slice(0, 4)} trailer`;
+
+    axios.get('https://www.googleapis.com/youtube/v3/search?', {
+        params: {
+            part: 'snippet',
+            type: 'video',
+            maxResults: 1,
+            q: query,
+            key: youtube_API_KEY,
+        }
+    }).then(response => {
+        media.youtube = `https://www.youtube.com/watch?v=${response.data.items[0].id.videoId}`;
+        console.log(`> [movie-bot] Youtube trailer link for "${media.original_title}" stored`);
+    }).catch(error => console.log(error));
+
 }
