@@ -5,5 +5,5 @@ After getting the parameters, it uses [The Movie Database API](https://www.themo
 
 :page_facing_up: **Text**. This part of the code, making use of the [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser) provide by [Algorithmia](https://algorithmia.com/) (that provides basic API access to Wikipedia), gets the summary of the chosen content entry at Wikipedia. After that this summary is "cleaned" (removing blanks and some characters). Another service is used at this section: the [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/) provided by the [IBM´s Watson Cloud Services](https://www.ibm.com/watson). With this service, a list of keywords is extracted by text interpretation.
 
-2- :camera: **Image**. 
+:camera: **Image**. 
 
