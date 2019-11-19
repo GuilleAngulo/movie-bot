@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 
-app.post('/discover-movies', MovieController.robot);
+app.post('/discover-movies', MovieController.init);
 app.post('/chat-movies', ChatController.conversation);
 
 app.post('/errors', function(req, res) {

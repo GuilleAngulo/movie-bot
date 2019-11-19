@@ -1,8 +1,9 @@
 'use strict';
 
 const inquirer = require('inquirer');
-const axios = require('axios');
 const ngrokURL = require('../config/config').NGROK_TUNNEL_URL;
+const axios = require('axios');
+
 const api = axios.create({
     baseURL: ngrokURL,
 });
@@ -42,7 +43,7 @@ async function chat(question = null, options = null) {
             else {
                 try {
                     let option = options.filter(item => item.title == answer.option)[0].value;
-                    //FINAL CHAT STATEMENT CONDITION
+                    //Chat Ending Statement Condition
                     if ((question.startsWith("Entonces, estás seguro que quieres")) && (option == 'si')) {
                         await api.post('/chat-movies', { message: option });
                         return;

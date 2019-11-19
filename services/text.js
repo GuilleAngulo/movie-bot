@@ -15,27 +15,23 @@ const metadata = require('../services/metadata');
 
 module.exports = {
 
-    async robot() {
+    async init() {
         console.log('> [movie-bot] Starting...');
         const media = metadata.load();
-      
         await fetchContentFromWikipedia(media);
-        //sanitizeContent(media);
         await fetchKeywordsFromWatson(media);
-      
         metadata.save(media);
       }
 }
 
 
   async function fetchContentFromWikipedia(media) {
-    
     let query;
 
     if (media.type == 'movie')
-      query = `${media.original_title} (${media.release_date.slice(0, 4)} film)`;
+      query = `${media.original_title} ${media.release_date.slice(0, 4)} film`;
     else if (media.type == 'tv')
-      query = `${media.original_title} (${media.release_date.slice(0, 4)} TV series)`;
+      query = `${media.original_name} ${media.first_air_date.slice(0, 4)} TV series`;
     
     console.log(`> [movie-bot] Fetching data from Wikipedia - (query: ${query})`);
     const wikipediaSearchTerm = {
@@ -73,10 +69,8 @@ module.exports = {
         if (line.trim().length === 0 || line.trim().startsWith('=')) {
           return false
         }
-
         return true
       })
-
       return withoutBlankLinesAndMarkdown.join(' ')
     }
   }

@@ -19,8 +19,8 @@ module.exports = {
     },
 
 
-    getImages(movieId) {
-      return axios.get(`https://api.themoviedb.org/3/movie/${movieId}/images`, {
+    getImages(mediaId, mediaType) {
+      return axios.get(`https://api.themoviedb.org/3/${mediaType}/${mediaId}/images`, {
         params: {
           api_key: moviedb.MOVIEDB_TOKEN
         }

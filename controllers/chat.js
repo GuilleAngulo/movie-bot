@@ -14,9 +14,9 @@ module.exports = {
         }, { 
             conversationId: 'CONVERSATION_ID' 
         })
-        .then( response => {
+        .then(response => {
             res.status(200).send({ message: response.messages})
         })
-        .catch(err => console.error('> [movie-bot] Something went wrong:: ', err))
+        .catch(err => console.error('> [movie-bot] Something went wrong: ', err))
     }
 }

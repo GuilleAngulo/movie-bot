@@ -1,27 +1,28 @@
 'use strict';
 
-const axios = require('axios');
 const imageDownloader = require('image-downloader');
+
 const google = require('googleapis').google;
 const customSearch = google.customsearch('v1');
+
 const metadata = require('../services/metadata');
 const logger = require('../services/log').logger.getLogger('error');
 const config = require('../config/config');
+
 const moviedbAPI = require('../services/moviedb-api');
 const googleSearchCredentials = require('../credentials/google-search');
-const youtube_API_KEY = require('../credentials/youtube-search').API_KEY;
 
 
 module.exports = {
-    async robot() {
+    async init() {
         const media = metadata.load();
         await downloadPoster(media);
         await donwnloadAlternativePoster(media);
         await downloadImages(media);
+        await downloadImagesFromGoogle(media);
         metadata.save(media);
     }
 }
-
 
 async function downloadPoster(media) {
     try {
@@ -50,13 +51,16 @@ async function googleCustomSearchImageLink(query) {
         imgSize: 'huge',
         num: 2
     });
-
     return response.data.items[1].link;
 }
 
 async function donwnloadAlternativePoster(media) {
+    let query;
 
-    const query = media.original_title + ' ' + media.type + ' poster ' + media.release_date.slice(0, 4);
+    if (media.type == 'movie')
+        query = media.original_title + ' ' + media.type + ' poster ' + media.release_date.slice(0, 4);
+    if (media.type == 'tv')
+        query = media.original_name + ' ' + media.type + 'series poster ' + media.first_air_date.slice(0, 4);
 
     try {
         const alternativePosterURL = await googleCustomSearchImageLink(query);
@@ -68,34 +72,19 @@ async function donwnloadAlternativePoster(media) {
     }
 }
 
-async function downloadImagesFromGoogle(media) {
-    console.log(`> [movie-bot] Downloading images from Google`);
-    for (let i = 0; i < config.NUMBER_IMAGES; i++) {
-        const query = media.original_title + ' ' + media.type +  ' ' + media.release_date.slice(0, 4) + ' ' + media.keywords[i];
-        
-        try{
-            const imageLink = await googleCustomSearchImageLink(query);
-            console.log(`> [movie-bot] Image ${i + 1} - (query: ${query}) `);
-            await downloadAndSave(imageLink, `${media.title}-${i + 1}.jpg`);
-        } catch (err) {
-            logger.error(`Failed to download an image `, error);
-        }
-    }
-    console.log(`> [movie-bot] Images correctly downloaded`);
-}
-
 async function downloadImages(media) {
     console.log(`> [movie-bot] Downloading images from theMovieDB`);
     try {
-        const response =  await moviedbAPI.getImages(media.id);
+        const response =  await moviedbAPI.getImages(media.id, media.type);
         for (let i = 0; i < config.NUMBER_IMAGES; i++) {
             const imageLink = getImageLink('w500', response.data.backdrops[i].file_path);
-            //await downloadAndSave(imageLink, `${media.title.toLowerCase()}-${i + 1}.jpg`);
             await downloadAndSave(imageLink, `${i + 1}.jpg`);
             console.log(`> [movie-bot] Image ${i + 1} downloaded.`);
         }
     } catch (error) {
         logger.error(error);
+    } finally {
+        return;
     }
 }
 
@@ -103,20 +92,23 @@ function getImageLink(size, file_path) {
     return `${config.MOVIEDB_IMAGE_BASE_URL}/${size}${file_path}`;
 }
 
-async function youtubeSearch(media) {
-    const query = `${media.original_title} ${media.release_date.slice(0, 4)} trailer`;
-
-    axios.get('https://www.googleapis.com/youtube/v3/search?', {
-        params: {
-            part: 'snippet',
-            type: 'video',
-            maxResults: 1,
-            q: query,
-            key: youtube_API_KEY,
+/** Not Used */
+async function downloadImagesFromGoogle(media) {
+    console.log(`> [movie-bot] Downloading images from Google`);
+    for (let i = 0; i < config.NUMBER_IMAGES; i++) {
+        let query;
+        if (media.type == 'movie')
+            query = `${media.original_title} ${media.release_date.slice(0, 4)} Film ${media.keywords[i]}`;
+        if (media.type == 'tv')
+            query = `${media.original_name} ${media.first_air_date.slice(0, 4)} TV series ${media.keywords[i]}`;
+        
+        try{
+            const imageLink = await googleCustomSearchImageLink(query);
+            console.log(`> [movie-bot] Image ${i + 1} - (query: ${query}) `);
+            await downloadAndSave(imageLink, `${media.title}-${i + 1}.jpg`);
+        } catch (err) {
+            logger.error(`Failed to download an image `, err);
         }
-    }).then(response => {
-        media.youtube = `https://www.youtube.com/watch?v=${response.data.items[0].id.videoId}`;
-        console.log(`> [movie-bot] Youtube trailer link for "${media.original_title}" stored`);
-    }).catch(error => console.log(error));
-
+    }
+    console.log(`> [movie-bot] Images correctly downloaded`);
 }

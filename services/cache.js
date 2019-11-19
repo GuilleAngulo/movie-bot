@@ -13,9 +13,7 @@ const logger = log.logger.getLogger('error');
 module.exports = {
 
     async cleanPreviousContent() {
-
         const previousContentPath = config.CURRENT_CONTENT_PATH;
-    
         fs.readdir(previousContentPath, (err, files) => {
             if (err) logger.error(err);
             for (let file of files) {
@@ -24,18 +22,14 @@ module.exports = {
                 });
             }
         });
-    
         console.log('> [movie-bot] Previous content removed.');
     },
 
     async compressContent() {
         setUpStoredContentDirectory();
-
         const content = metadata.load();
-
         const input = fs.readdirSync(config.CURRENT_CONTENT_PATH);
         const output = fs.createWriteStream(config.STORED_CONTENT_PATH + `${content.id}.tar.gz`);
-
         const archive = archiver('tar', {
             gzip: true,
             zlib: { level: 9 } // Sets the compression level.
@@ -73,9 +67,7 @@ module.exports = {
     },
 
     async decompressContent() { 
-
         const content = metadata.load();
-
         targz.decompress({
             src: config.STORED_CONTENT_PATH + `${content.id}.tar.gz`,
             dest: config.CURRENT_CONTENT_PATH
