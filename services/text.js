@@ -20,7 +20,7 @@ module.exports = {
         const media = metadata.load();
       
         await fetchContentFromWikipedia(media);
-        sanitizeContent(media);
+        //sanitizeContent(media);
         await fetchKeywordsFromWatson(media);
       
         metadata.save(media);
@@ -29,7 +29,14 @@ module.exports = {
 
 
   async function fetchContentFromWikipedia(media) {
-    const query = media.original_title;
+    
+    let query;
+
+    if (media.type == 'movie')
+      query = `${media.original_title} (${media.release_date.slice(0, 4)} film)`;
+    else if (media.type == 'tv')
+      query = `${media.original_title} (${media.release_date.slice(0, 4)} TV series)`;
+    
     console.log(`> [movie-bot] Fetching data from Wikipedia - (query: ${query})`);
     const wikipediaSearchTerm = {
         "articleName": query,
@@ -40,18 +47,15 @@ module.exports = {
     try {
       const wikipediaResponse = await wikipediaAlgorithm.pipe(wikipediaSearchTerm);
       const wikipediaContent = wikipediaResponse.get();
-  
       media.links = wikipediaContent.references;
       media.summary = wikipediaContent.summary;
       console.log('> [movie-bot] Data correctly stored');
-      return;
+      sanitizeContent(media);
     } catch (error) {
       logger.error('> [movie-bot] Error fetching data from Wikipedia:: ', error);
     } finally {
-      media.links = "";
-      media.summary = "";
+      return;
     }
-    
     
   }
 

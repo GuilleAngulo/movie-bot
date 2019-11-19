@@ -42,7 +42,8 @@ module.exports = {
         });
 
         output.on('close', () => {
-            console.log(`> [movie-bot] Compressing done. Content successfully stored (${archive.pointer()} bytes).`);
+            const formattedBytes = formatBytes(archive.pointer());
+            console.log(`> [movie-bot] Compressing done. Content successfully stored (${formattedBytes} bytes).`);
         });
 
         output.on('end', () => {
@@ -109,4 +110,16 @@ function setUpStoredContentDirectory() {
           process.exit(1);
         }
     }
+}
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const base = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(base));
+
+    return parseFloat((bytes / Math.pow(base, i)).toFixed(dm)) + ' ' + sizes[i];
 }

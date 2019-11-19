@@ -9,14 +9,13 @@ module.exports = {
     async robot() {
         const media = metadata.load();
         await youtubeSearch(media);
-        metadata.save(media);
     }
 }
 
 async function youtubeSearch(media) {
     const query = `${media.original_title} ${media.release_date.slice(0, 4)} trailer`;
 
-    axios.get('https://www.googleapis.com/youtube/v3/search?', {
+    await axios.get('https://www.googleapis.com/youtube/v3/search?', {
         params: {
             part: 'snippet',
             type: 'video',
@@ -28,6 +27,8 @@ async function youtubeSearch(media) {
         let link = `https://www.youtube.com/watch?v=${response.data.items[0].id.videoId}`
         media.youtube = link;
         console.log(`> [movie-bot] Youtube trailer link for "${media.original_title}" stored`);
+        metadata.save(media);
+        return;
     }).catch(error => console.log(error));
 
 }
