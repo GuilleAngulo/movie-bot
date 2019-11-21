@@ -11,15 +11,19 @@ The project uses some externals services:
 
 - [The Movie Database API](https://www.themoviedb.org/documentation/api). Provides three main services. First and most important is the discover method, making a request (using chatbot response parameters) a list of suggested films is returned sort by popularity. Also there methods to get the selected media images and the poster.
 
-- [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser). This service, included at [Algorithmia](https://algorithmia.com/), is used to store at the metadata file (**content.json**) a Wikipedia summary of the selected media as well as the reference links.
+- [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser). This service, included at [Algorithmia](https://algorithmia.com/), is used to store at the metadata file (**content.json**) a Wikipedia summary of the selected media as well as the reference links (provides basic API access to Wikipedia).
 
-- [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/). With this service, included at [IBM´s Watson Cloud Services](https://www.ibm.com/watson), it is possible to make a request with a selected text and get an analysis with keywords taken from it. In this case keywords taken from wikipedia summary.
+- [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/). With this service, included at [IBM´s Watson Cloud Services](https://www.ibm.com/watson), it is possible to make a request with a selected text and get an analysis with keywords as a result. In this case keywords taken from wikipedia summary text.
 
 - [Youtube API](https://developers.google.com/youtube/v3/docs/search/list). Also the Youtube API service is used to make a request in order to get a youtube link with the trailer of the selected movie or TV serie.
 
-## Sections
+## Code Sections
 
-- :page_facing_up: **Text**. This part of the code, making use of the [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser) provide by [Algorithmia](https://algorithmia.com/) (that provides basic API access to Wikipedia), gets the summary of the chosen content entry at Wikipedia. After that this summary is "cleaned" (removing blanks and some characters). Another service is used at this section: the [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/) provided by the [IBM´s Watson Cloud Services](https://www.ibm.com/watson). With this service, a list of keywords is extracted by text interpretation.
+- :speech_balloon: **Chat**.
+
+- :dizzy: **Movie Discover**. At the SAP Conversational AI chatbot is defined as the ultimate action to send a POST request with the conversation parameters to our localhost:5000/chat-movies.
+
+- :page_facing_up: **Text**. When the first request (discover method) is made to TheMovieDatabase API, the result data is stored at one "metadata" file: **content.json**. After that, more information is added to that file accross the app flow. To begin with the [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser) is called in order to get the summary of the chosen movie/TV serie entry at Wikipedia. After that this summary is "cleaned"(removing blanks and some characters) for clarity reasons. Then the [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/) is used to get a list of keywords (by its text interpretator). 
 
 :camera: **Image**. In this part a poster, alternative poster and images of the selected content are downloaded. The poster and half of the images are downloaded using TMDb API, while the alternative poster and the rest of the images are downloaded from a Google search request.
 
