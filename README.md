@@ -9,15 +9,13 @@ The project uses some externals services:
 
 - [SAP Conversational AI](https://cai.tools.sap/). Provides the tools to create a chatbot with AI so the user can have a human like conversation (it recognizes such things as greetings, to answer accordingly). The bot has been developed at their page, firstly by adding two main blocks of the bot: Intents and Entities. The intents represents the purpose of the phrase, what has to be done (greetings, farewells, movie recomendation) and entities are extracts of concise information from the phrase, helping to do what has to be done (genre, type of recording). It is neccesary to give information and values in each case so the bot can interpret both intents and entities. At entities is required a little extra information, like associations between genre names and genre ids (as stored at TheMovieDatabase) and its synonyms (a user can ask for a "scary movie" referring to an horror genre movie). Finally there are triggers, requirements and actions. Triggers evaluate if there are intents at the phrase, if the "discover movie" intent is present then go to next step. In requirements is possible to specify which entities are required for which actions: if type, genre and nationality are specified by the user then go to action. AT last, actions are the place to define what to do if requirements are fullfilled: make a request to our app URL with the bots memory parameters so the app can make a new request to TheMovieDatabase API with this parameters. Otherwise is possible to define an action where the memory is removed to start the conversation again.
 
+- [The Movie Database API](https://www.themoviedb.org/documentation/api). Provides three main services. First and most important is the discover method, making a request (using chatbot response parameters) a list of suggested films is returned sort by popularity. Also there methods to get the selected media images and the poster.
 
+- [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser). This service, included at [Algorithmia](https://algorithmia.com/), is used to store at the metadata file (**content.json**) a Wikipedia summary of the selected media as well as the reference links.
 
-- [The Movie Database API](https://www.themoviedb.org/documentation/api)
+- [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/). With this service, included at [IBM´s Watson Cloud Services](https://www.ibm.com/watson), it is possible to make a request with a selected text and get an analysis with keywords taken from it. In this case keywords taken from wikipedia summary.
 
-- [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser)
-
-- [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/)
-
-- [Youtube API](https://developers.google.com/youtube/v3/docs/search/list)
+- [Youtube API](https://developers.google.com/youtube/v3/docs/search/list). Also the Youtube API service is used to make a request in order to get a youtube link with the trailer of the selected movie or TV serie.
 
 :page_facing_up: **Text**. This part of the code, making use of the [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser) provide by [Algorithmia](https://algorithmia.com/) (that provides basic API access to Wikipedia), gets the summary of the chosen content entry at Wikipedia. After that this summary is "cleaned" (removing blanks and some characters). Another service is used at this section: the [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/) provided by the [IBM´s Watson Cloud Services](https://www.ibm.com/watson). With this service, a list of keywords is extracted by text interpretation.
 
