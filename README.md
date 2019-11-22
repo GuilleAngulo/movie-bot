@@ -17,6 +17,8 @@ The project uses some externals services:
 
 - [Youtube API](https://developers.google.com/youtube/v3/docs/search/list). Also the Youtube API service is used to make a request in order to get a youtube link with the trailer of the selected movie or TV serie.
 
+-[Google Custom Search Engine](https://cse.google.com/). Google Custom Search enables to create a custom search engine for your app. This service is used to get an alternative poster image as well as other images, in case the media collected from TheMovieDatabase is not enough.
+
 ## Code Sections
 
 - :speech_balloon: **Chat**.
@@ -25,11 +27,11 @@ The project uses some externals services:
 
 - :page_facing_up: **Text**. When the first request (discover method) is made to TheMovieDatabase API, the result data is stored at one "metadata" file: **content.json**. After that, more information is added to that file accross the app flow. To begin with the [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser) is called in order to get the summary of the chosen movie/TV serie entry at Wikipedia. After that this summary is "cleaned"(removing blanks and some characters) for clarity reasons. Then the [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/) is used to get a list of keywords (by its text interpretator). 
 
-:camera: **Image**. In this part a poster, alternative poster and images of the selected content are downloaded. The poster and half of the images are downloaded using TMDb API, while the alternative poster and the rest of the images are downloaded from a Google search request.
+- :camera: **Image**. In this part a poster, alternative poster and images of the selected content are downloaded. The poster and half of the images are downloaded using TMDb API, while the alternative poster and the rest of the images are downloaded from a Google search request.
 
-:video_camera: **Youtube**. Finally it makes another request to Youtube API URL in order to get a link to a trailer of the selected media.
+- :video_camera: **Youtube**. Finally it makes another request to Youtube API URL in order to get a link to a trailer of the selected media.
 
-:package: **Cache**. Another important part is that the app implements a kind of a *cache memory*: If the random selected content was picked before, the bot doesn´t have to make every request for data again because in the folder **'/content/stored/'** there are stored all media data and metadata compressed (the file names are the content id at The Movie Database). This way the app will be faster the more is used.
+- :package: **Cache**. Another important part is that the app implements a kind of a *cache memory*: If the random selected content was picked before, the bot doesn´t have to make every request for data again because in the folder **'/content/stored/'** there are stored all media data and metadata compressed (the file names are the content id at The Movie Database). This way the app will be faster the more is used.
 
 ## Prerequisites
 ### ngrok
