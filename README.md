@@ -17,7 +17,7 @@ The project uses some externals services:
 
 - [Youtube API](https://developers.google.com/youtube/v3/docs/search/list). Also the Youtube API service is used to make a request in order to get a youtube link with the trailer of the selected movie or TV serie.
 
--[Google Custom Search Engine](https://cse.google.com/). Google Custom Search enables to create a custom search engine for your app. This service is used to get an alternative poster image as well as other images, in case the media collected from TheMovieDatabase is not enough.
+- [Google Custom Search Engine](https://cse.google.com/). Google Custom Search enables to create a custom search engine for your app. This service is used to get an alternative poster image as well as other images, in case the media collected from TheMovieDatabase is not enough.
 
 ## Code Sections
 
