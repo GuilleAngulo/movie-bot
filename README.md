@@ -38,7 +38,9 @@ The simples way to run the project in your computer requires tunneling service t
 ```
 ngrok http 5000
 ```
-The port selected is 5000 because our app is running at this port (is possible to change it at **"/config/config.js"**). Now the public address making a tunnel to your application running at http://localhost:5000 is shown as at the image below:
+The port selected is 5000 because our app is running at this port (is possible to change it at **"/config/config.js"**). Now the public address (https://XXX.ngrok.io) making a tunnel to your application running at http://localhost:5000 is shown as at the image below:
 
 ### SAP Conversational AI Bot
-It´s necessary to sign up and create the bot  
+It´s necessary to sign up (is possible to do it with an existing GitHub account) and create bot. Fork the bot used at this project from [here](https://cai.tools.sap/guilleangulo/movie-bot/train/intents), by just selecting "fork" button. Next you will be able to change the base of the bot (by adding othe languages or changing values at bot asnwers). Finally is necessary to change the action that will send chat values to the running app. To do this, just click on "Build" tab and select "Discover" skill. Then go to "Actions" tab and change Webhook Configuration Base URL with your ngrok public URL (taken from the previous step) and add the "discover-movies" routes to it: **https://XXX.ngrok.io/chat-movies**. Your bot is ready.
+
+
