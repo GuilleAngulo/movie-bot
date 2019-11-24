@@ -30,6 +30,8 @@ The project uses some externals services:
 
 - :package: **Cache**. Another important part is that the app implements a kind of a *cache memory*: If the random selected content was picked before, the bot doesn´t have to make every request for retrieving data again because in the folder **'/content/stored/'** there are stored all media data and metadata compressed (the file names are the content id at The Movie Database). This way the app will be faster the more is used.
 
+- :floppy_disk: **Metadata**. This service is in charge for providing **save()** and **load()** functions to add new content to the metadata file "content.json".
+
 ## Prerequisites
 ### ngrok
 The simples way to run the project in your computer it may requires tunneling service, to receive the answer from chatbot service at a public address:  It creates a public URL for you and forwards requests to your computer. The service at ngrok offres a free plan, and it is possible to run it as simple as:
