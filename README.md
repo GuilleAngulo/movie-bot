@@ -52,8 +52,11 @@ To have access to TMDb API is essencial to have an API Key in order to make use 
 params: { api_key: YOUR_API_KEY ...
 ```
 
-### Wikipedia Parser Algorithm from Algorithmia
+### Algorithmia account
 After creating a free account [here](https://algorithmia.com/signup), copy your API Key at your account menu and paste it at **'services/text.js'(line 41): 
 ```
 const algorithmiaAuthenticated = algorithmia(YOUR_ALGORITHMIA_API_KEY);
 ```
+
+### IBM Cloud Service Account
+Is possible to create an account [here](https://cloud.ibm.com/registration). After that is required to create the [Natural Language Understanding service](https://cloud.ibm.com/catalog/services/natural-language-understanding) service. Finally, at the service admin page, you have a tab named 'Service credentials' where you can copy into a document and name it as **'watson-nlu.js'** at **'credentials'** folder.
