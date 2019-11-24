@@ -47,8 +47,8 @@ const client = new sapcai(YOUR_DEVELOPER_TOKEN);
 ```
 
 ### The Movie Database API Credentials
-To have access to TMDb API is essencial to have an API Key in order to make use of their services. Is as simple as [sign up here](https://www.themoviedb.org/account/signup), copy your API Key and paste it at **'services/moviedb-api.js'** at the two functions:
+To have access to TMDb API is essencial to have an API Key in order to make use of their services. Is as simple as [sign up here](https://www.themoviedb.org/account/signup), copy your API Key and paste it at **'services/moviedb-api.js'** at the two functions params:
 ```
-api_key:YOUR_API_KEY
+{ api_key:YOUR_API_KEY ...
 ```
 
