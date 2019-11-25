@@ -40,6 +40,13 @@ ngrok http 5000
 ```
 The port selected is 5000 because our app is running at this port (is possible to change it at **/config/config.js**). Now the public address (https://XXX.ngrok.io) making a tunnel to your application running at http://localhost:5000 is shown as at the image below:
 
+
+**IMPORTANT**: As the ngrok account used is free, the public address will be changing each time ngrok service is stopped and started again. So its neccesary with each new app deploy to change the new public address at **/config/config.js**:
+```
+NGROK_TUNNEL_URL: https://XXX.ngrok.io
+```
+And also change it at the bot configuration, as described at the following step.
+
 ### SAP Conversational AI Account and Bot
 It´s necessary to sign up (is possible to do it with an existing GitHub account) and create bot. Fork the bot used at this project from [here](https://cai.tools.sap/guilleangulo/movie-bot/train/intents), by just selecting "fork" button. Next you will be able to change the base of the bot (by adding othe languages or changing values at bot asnwers). Finally is necessary to change the action that will send chat values to the running app. To do this, just click on "Build" tab and select "Discover" skill. Then go to "Actions" tab and change Webhook Configuration Base URL with your ngrok public URL (taken from the previous step) and add the "discover-movies" routes to it: **https://XXX.ngrok.io/chat-movies**. Finally, to be able to comunicate with your bot from the app you have to change at **'controllers/chat.js (line 9)'** the Developer Token provided at your SAPCAI account:
 ```
