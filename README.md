@@ -89,10 +89,10 @@ After that is possible to custom the search engine created by accessing **Custom
 
 ![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/movie-bot-chat.gif)
 
-### Previously Stored Title
+### Previously Stored Title Demo
 
 ![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/movie-bot-previous.gif)
 
-### New Title
+### New Title Demo
 
 ![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/movie-bot-new.gif)
