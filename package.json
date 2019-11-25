@@ -4,7 +4,8 @@
   "description": "A movie recommendation bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "Guillermo Angulo",
   "license": "MIT",

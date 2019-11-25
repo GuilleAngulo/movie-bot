@@ -1,6 +1,7 @@
 'use strict';
 
 const imageDownloader = require('image-downloader');
+const path = require('path');
 
 const google = require('googleapis').google;
 const customSearch = google.customsearch('v1');
@@ -38,7 +39,7 @@ async function downloadPoster(media) {
 async function  downloadAndSave(url, fileName) {
     return imageDownloader.image({
         url,
-        dest: `./content/current/${fileName}`
+        dest: path.resolve(__dirname, '..', 'content', 'current', `${fileName}`)
     });
 }
 

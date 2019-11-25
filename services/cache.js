@@ -6,14 +6,14 @@ const archiver = require('archiver');
 var targz = require('targz');
 
 const metadata = require('../services/metadata');
-const config = require('../config/config');
 const log = require('../services/log');
 const logger = log.logger.getLogger('error');
 
 module.exports = {
 
     async cleanPreviousContent() {
-        const previousContentPath = config.CURRENT_CONTENT_PATH;
+        const previousContentPath = path.resolve(__dirname, '..', 'content', 'current');
+
         fs.readdir(previousContentPath, (err, files) => {
             if (err) logger.error(err);
             for (let file of files) {
@@ -21,15 +21,15 @@ module.exports = {
                     if(err) logger.error(err);
                 });
             }
-        });
+        }); 
         console.log('> [movie-bot] Previous content removed.');
     },
 
     async compressContent() {
         setUpStoredContentDirectory();
         const content = metadata.load();
-        const input = fs.readdirSync(config.CURRENT_CONTENT_PATH);
-        const output = fs.createWriteStream(config.STORED_CONTENT_PATH + `${content.id}.tar.gz`);
+        const input = fs.readdirSync(path.resolve(__dirname, '..', 'content', 'current'));
+        const output = fs.createWriteStream(path.resolve(__dirname, '..', 'content', 'stored', `${content.id}.tar.gz`));
         const archive = archiver('tar', {
             gzip: true,
             zlib: { level: 9 } // Sets the compression level.
@@ -59,7 +59,7 @@ module.exports = {
         archive.pipe(output);
 
         input.map(filename => {
-            const fileContent = fs.createReadStream(config.CURRENT_CONTENT_PATH + filename);
+            const fileContent = fs.createReadStream(path.resolve(__dirname, '..', 'content', 'current', `${filename}`));
             archive.append(fileContent, { name: filename });
         });
 
@@ -69,8 +69,8 @@ module.exports = {
     async decompressContent() { 
         const content = metadata.load();
         targz.decompress({
-            src: config.STORED_CONTENT_PATH + `${content.id}.tar.gz`,
-            dest: config.CURRENT_CONTENT_PATH
+            src: path.resolve(__dirname, '..', 'content', 'stored', `${content.id}.tar.gz`),
+            dest: path.resolve(__dirname, '..', 'content', 'current')
         }, err => {
             if (err) {
                 logger.error(err);
@@ -82,7 +82,7 @@ module.exports = {
 
     async isContentStored() {
         const content = metadata.load();
-        const input = fs.readdirSync(config.STORED_CONTENT_PATH);
+        const input = fs.readdirSync(path.resolve(__dirname, '..', 'content', 'stored'));
         
         return input.some(filename => {
             if(filename == `${content.id}.tar.gz`) {
@@ -95,7 +95,7 @@ module.exports = {
 
 function setUpStoredContentDirectory() {
     try {
-        fs.mkdirSync(config.STORED_CONTENT_PATH);
+        fs.mkdirSync(path.resolve(__dirname, '..', 'content', 'stored'));
     } catch (error) {
         if (error.code != 'EEXIST') {
           console.error("Error setting up the stored content directory:: ", error);

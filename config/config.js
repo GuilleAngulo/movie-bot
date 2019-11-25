@@ -1,8 +1,6 @@
 module.exports = {
     PORT: process.env.PORT || 5000,
-    NGROK_TUNNEL_URL: 'https://a53b3a61.ngrok.io',
-    CURRENT_CONTENT_PATH: './content/current/',
-    STORED_CONTENT_PATH: './content/stored/',
+    NGROK_TUNNEL_URL: 'https://ab926470.ngrok.io',
     LOG_PATH: `./log/` ,
     APP_LANGUAGE: 'en',
     MOVIEDB_IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/',

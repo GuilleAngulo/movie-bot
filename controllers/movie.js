@@ -51,59 +51,32 @@ async function discoverMovie(req, res) {
             terminate = true;
             return res.status(204).send({ error: 'Not content found' });
         }
-        let mediaSelected; 
-        //If the number of results is lower than CONFIGURED_NUMBER_RESULTS
-        if (result.length < config.NUMBER_RESULTS) {
-            const randomNumber = getRandomInt(0, result.length);
-            //Select a random number from the list of results
-            mediaSelected = result.slice(0, result.length)[randomNumber];
 
-            console.log('> List of suggestions:');
-            console.log('> --------------------');
-            if (type == "movie") {
-                result.map((content, index) => {
-                    console.log(`> ${index + 1}) ${content.title} (${content.release_date.slice(0, 4)})`);
-                });
-            } else if (type == "tv") {
-                result.map((content, index) => {
-                    console.log(`> ${index + 1}) ${content.original_name} (${content.first_air_date.slice(0, 4)})`);
-                });
-            }
-            
-            console.log('> --------------------');
-
-        //If the number of results is higher than CONFIGURED_NUMBER_RESULTS
-        } else {
-            const randomNumber = getRandomInt(0, config.NUMBER_RESULTS);
-            //Select a random number (using CONFIGURED_NUMBER_RESULTS) from the list of results
-            mediaSelected = result.slice(0, config.NUMBER_RESULTS)[randomNumber];
-
-            console.log('> List of suggestions:');
-            console.log('> --------------------');
-            /*result.slice(0, config.NUMBER_RESULTS).map((content, index) => {
-                console.log(`> ${index + 1}) ${content.title || content.original_name} (${content.release_date.slice(0, 4) || content.first_air_date.slice(0, 4) || '' })`);
-            });*/
-
-            if (type == "movie") {
-                result.slice(0, config.NUMBER_RESULTS).map((content, index) => {
-                    console.log(`> ${index + 1}) ${content.title} (${content.release_date.slice(0, 4)})`);
-                });
-            } else if (type == "tv") {
-                result.slice(0, config.NUMBER_RESULTS).map((content, index) => {
-                    console.log(`> ${index + 1}) ${content.original_name} (${content.first_air_date.slice(0, 4)})`);
-                });
-            }
-            console.log('> --------------------');
-        }
+        let resultLength;
+        (result.length < config.NUMBER_RESULTS) ?  
+            resultLength = result.length 
+            : 
+            resultLength = config.NUMBER_RESULTS;
         
-        mediaSelected.type = type;
+        console.log('> List of suggestions:');
+        console.log('> --------------------');
+        result.slice(0, resultLength).map((content, index) => {
+            if (type == "movie") 
+                console.log(`> ${index + 1}) ${content.title} (${content.release_date.slice(0, 4)})`)
+            else
+                console.log(`> ${index + 1}) ${content.original_name} (${content.first_air_date.slice(0, 4)})`)
+        });
+        console.log('> --------------------');
+        
+        const titleSelected = result.slice(0, resultLength)[getRandomInt(0, resultLength)];
+        titleSelected.type = type;
        
         if (type == "movie") 
-            console.log(`> [movie-bot] Chosen movie: ${mediaSelected.title} (${mediaSelected.release_date.slice(0, 4)})`); 
+            console.log(`> [movie-bot] Chosen movie: ${titleSelected.title} (${titleSelected.release_date.slice(0, 4)})`); 
         else if (type == "tv") 
-            console.log(`> [movie-bot] Chosen TV serie: ${mediaSelected.original_name} (${mediaSelected.first_air_date.slice(0, 4)})`);
+            console.log(`> [movie-bot] Chosen TV serie: ${titleSelected.original_name} (${titleSelected.first_air_date.slice(0, 4)})`);
         
-        metadata.save(mediaSelected);
+        metadata.save(titleSelected);
         return;
 
     } catch (error) {
