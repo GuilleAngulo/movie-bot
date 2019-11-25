@@ -84,3 +84,15 @@ After that is possible to custom the search engine created by accessing **Custom
 ```
  cx: YOUR_SEARCH_ENGINE_ID,
 ```
+
+### Chat Demo
+
+![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/movie-bot-chat.gif)
+
+### Previously Stored Title
+
+![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/movie-bot-previous.gif)
+
+### New Title
+
+![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/movie-bot-new.gif)
