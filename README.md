@@ -61,4 +61,17 @@ const algorithmiaAuthenticated = algorithmia(YOUR_ALGORITHMIA_API_KEY);
 ### IBM Cloud Service Account
 Is possible to create an account [here](https://cloud.ibm.com/registration). After that, is required to create the [Natural Language Understanding service](https://cloud.ibm.com/catalog/services/natural-language-understanding). Finally, at the admin page of the service, there is a a tab named 'Service credentials' where you can copy all the values into a document and name it as **'watson-nlu.js'** at **credentials** folder.
 
-
+### Google Cloud Plataform Account
+This part is optional: The images and poster of the movie/TV serie are already downloaded from TheMovieDatabase DB, so this is an additional content. An option to run the app without using this API service is to comment both functions at **services/image.js** as below:
+```
+// await donwnloadAlternativePoster(media);
+// await downloadImagesFromGoogle(media);
+```
+Otherwise, to have this part working, is needed to link a Google account to the [Google Plataform Cloud](https://cloud.google.com/). This service is free, but other resources are paid. That´s why accross the process you´ll be asked to insert one payment method (no need to worry, this project only uses a free service). After that you´ll be asked to create a new project, and once it is selected go to **APIs > Library**. The service used is **Custom Search API**, so after searching and activating it a notification will appear asking to "Create credencials". Finally the API required is ready, copy and paste at **services/image.js (line 47)**:
+```
+ auth: YOUR_GOOGLE_CLOUD_API_KEY,
+```
+After that is possible to custom the search engine created by accessing **Custom Search Engine**, and filling 'Sites to search' with 'google.com' and at 'Advance settings' select for Schema type **Thing**. Then, accessing control panel, is required to activate "Image search" and copy the search engine ID and paste it at **services/image.js (line 48)**:
+```
+ cx: YOUR_SEARCH_ENGINE_ID,
+```
