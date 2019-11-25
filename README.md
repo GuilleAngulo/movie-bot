@@ -59,4 +59,6 @@ const algorithmiaAuthenticated = algorithmia(YOUR_ALGORITHMIA_API_KEY);
 ```
 
 ### IBM Cloud Service Account
-Is possible to create an account [here](https://cloud.ibm.com/registration). After that is required to create the [Natural Language Understanding service](https://cloud.ibm.com/catalog/services/natural-language-understanding) service. Finally, at the service admin page, you have a tab named 'Service credentials' where you can copy into a document and name it as **'watson-nlu.js'** at **'credentials'** folder.
+Is possible to create an account [here](https://cloud.ibm.com/registration). After that, is required to create the [Natural Language Understanding service](https://cloud.ibm.com/catalog/services/natural-language-understanding). Finally, at the admin page of the service, there is a a tab named 'Service credentials' where you can copy into a document and name it as **'watson-nlu.js'** at **'credentials'** folder.
+
+
