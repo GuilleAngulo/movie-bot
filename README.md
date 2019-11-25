@@ -20,7 +20,7 @@ The project uses some externals services:
 
 - :speech_balloon: **Chat**. The chat controller is located at the 'controllers' folder. Its purpose is to start a new SAP Conversational AI client (using the developer Token provided to identify the robot) and create a dialog with the service: listening to POST requests at http://localhost:5000/chat-movies and sending the messages received to the robot. The chat service, located at 'services' folder, is used only for the command based app. Using the node module **inquirer**, it makes the command line chat more interactive (the answer options by the robot are showed to the user as an interactive list). The chat issue is solved using a recursion function where the answers of the robot are passed as new questions to the user. The recursion ends when one condition is filled: The robot question starts with a certain phrase (last confirmation for finish the chat) and the user answer is "yes".
 
-- :dart: **Movie Discover**. At the SAP Conversational AI chatbot setup is defined that the last action is to send a POST request with the conversation final parameters to our http://localhost:5000/discover-movies app listening address. The app receives this parameters and makes a new request to the TMDb API to get a list of movies/TV series based on this parameters. Once it haves the list, one title will be randomly chosen amongst the 5 best rated (at **"/config/config.js"** is possible to change the variable **NUMBER_RESULTS** to a higher number, to prevent the app repeating same recommendations). 
+- :dart: **Movie Discover**. At the SAP Conversational AI chatbot setup is defined that the last action is to send a POST request with the conversation final parameters to our http://localhost:5000/discover-movies app listening address. The app receives this parameters and makes a new request to the TMDb API to get a list of movies/TV series based on this parameters. Once it haves the list, one title will be randomly chosen amongst the 5 best rated (at **/config/config.js** is possible to change the variable **NUMBER_RESULTS** to a higher number, to prevent the app repeating same recommendations). 
 
 - :page_facing_up: **Text**. When the first request (discover method) is made to TheMovieDatabase API, the result data is stored at one "metadata" file: **content.json**. After that, more information is added to that file accross the app flow. To begin with the [Wikipedia Parser Algorithm](https://algorithmia.com/algorithms/web/WikipediaParser) is called in order to get the summary of the chosen movie/TV serie entry at Wikipedia. After that this summary is "cleaned"(removing blanks and some characters) for clarity reasons. Then the [Natural Language Understanding service](https://www.ibm.com/watson/services/natural-language-understanding/) is used to get a list of keywords (by its text interpretator). 
 
@@ -28,7 +28,7 @@ The project uses some externals services:
 
 - :video_camera: **Youtube**. Finally it makes another request to Youtube API URL in order to get a link to a trailer of the selected media.
 
-- :package: **Cache**. Another important part is that the app implements a kind of a *cache memory*: If the random selected content was picked before, the bot doesn´t have to make every request for retrieving data again because in the folder **'/content/stored/'** there are stored all media data and metadata compressed (the file names are the content id at The Movie Database). This way the app will be faster the more is used.
+- :package: **Cache**. Another important part is that the app implements a kind of a *cache memory*: If the random selected content was picked before, the bot doesn´t have to make every request for retrieving data again because in the folder **/content/stored/** there are stored all media data and metadata compressed (the file names are the content id at The Movie Database). This way the app will be faster the more is used.
 
 - :floppy_disk: **Metadata**. This service is in charge for providing **save()** and **load()** functions to add new content to the metadata file "content.json".
 
@@ -38,7 +38,7 @@ The simples way to run the project in your computer requires tunneling service t
 ```
 ngrok http 5000
 ```
-The port selected is 5000 because our app is running at this port (is possible to change it at **"/config/config.js"**). Now the public address (https://XXX.ngrok.io) making a tunnel to your application running at http://localhost:5000 is shown as at the image below:
+The port selected is 5000 because our app is running at this port (is possible to change it at **/config/config.js**). Now the public address (https://XXX.ngrok.io) making a tunnel to your application running at http://localhost:5000 is shown as at the image below:
 
 ### SAP Conversational AI Bot
 It´s necessary to sign up (is possible to do it with an existing GitHub account) and create bot. Fork the bot used at this project from [here](https://cai.tools.sap/guilleangulo/movie-bot/train/intents), by just selecting "fork" button. Next you will be able to change the base of the bot (by adding othe languages or changing values at bot asnwers). Finally is necessary to change the action that will send chat values to the running app. To do this, just click on "Build" tab and select "Discover" skill. Then go to "Actions" tab and change Webhook Configuration Base URL with your ngrok public URL (taken from the previous step) and add the "discover-movies" routes to it: **https://XXX.ngrok.io/chat-movies**. Finally, to be able to comunicate with your bot from the app you have to change at **'controllers/chat.js (line 9)'** the Developer Token provided at your SAPCAI account:
@@ -47,18 +47,18 @@ const client = new sapcai(YOUR_DEVELOPER_TOKEN);
 ```
 
 ### The Movie Database API Credentials
-To have access to TMDb API is essencial to have an API Key in order to make use of their services. Is as simple as [sign up here](https://www.themoviedb.org/account/signup), copy your API Key and paste it at **'services/moviedb-api.js'** at the two functions params:
+To have access to TMDb API is essencial to have an API Key in order to make use of their services. Is as simple as [sign up here](https://www.themoviedb.org/account/signup), copy your API Key and paste it at **services/moviedb-api.js** at the two functions params:
 ```
 params: { api_key: YOUR_API_KEY ...
 ```
 
 ### Algorithmia account
-After creating a free account [here](https://algorithmia.com/signup), copy your API Key at your account menu and paste it at **'services/text.js'(line 41)**: 
+After creating a free account [here](https://algorithmia.com/signup), copy your API Key at your account menu and paste it at **services/text.js (line 41)**: 
 ```
 const algorithmiaAuthenticated = algorithmia(YOUR_ALGORITHMIA_API_KEY);
 ```
 
 ### IBM Cloud Service Account
-Is possible to create an account [here](https://cloud.ibm.com/registration). After that, is required to create the [Natural Language Understanding service](https://cloud.ibm.com/catalog/services/natural-language-understanding). Finally, at the admin page of the service, there is a a tab named 'Service credentials' where you can copy all the values into a document and name it as **'watson-nlu.js'** at **'credentials'** folder.
+Is possible to create an account [here](https://cloud.ibm.com/registration). After that, is required to create the [Natural Language Understanding service](https://cloud.ibm.com/catalog/services/natural-language-understanding). Finally, at the admin page of the service, there is a a tab named 'Service credentials' where you can copy all the values into a document and name it as **'watson-nlu.js'** at **credentials** folder.
 
 
