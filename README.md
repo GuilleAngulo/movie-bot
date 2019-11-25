@@ -40,6 +40,7 @@ ngrok http 5000
 ```
 The port selected is 5000 because our app is running at this port (is possible to change it at **/config/config.js**). Now the public address (https://XXX.ngrok.io) making a tunnel to your application running at http://localhost:5000 is shown as at the image below:
 
+![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/ngrok.png)
 
 **IMPORTANT**: As the ngrok account used is free, the public address will be changing each time ngrok service is stopped and started again. So its neccesary with each new app deploy to change the new public address at **/config/config.js**:
 ```
@@ -52,6 +53,7 @@ It´s necessary to sign up (is possible to do it with an existing GitHub account
 ```
 const client = new sapcai(YOUR_DEVELOPER_TOKEN);
 ```
+![alt text](https://github.com/GuilleAngulo/movie-bot/blob/master/assets/images/sapcai-bot-action.png)
 
 ### The Movie Database API Credentials
 To have access to TMDb API is essencial to have an API Key in order to make use of their services. Is as simple as [sign up here](https://www.themoviedb.org/account/signup), copy your API Key and paste it at **services/moviedb-api.js** at the two functions params:
