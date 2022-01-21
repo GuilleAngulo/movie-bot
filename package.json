@@ -20,7 +20,7 @@
     "ibm-watson": "^4.4.0",
     "image-downloader": "^3.5.0",
     "inquirer": "^7.0.0",
-    "log4js": "^5.1.0",
+    "log4js": "^6.4.0",
     "sapcai": "^4.1.0",
     "sbd": "^1.0.16",
     "targz": "^1.0.1"
